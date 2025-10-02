@@ -7,8 +7,10 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://unpkg.com/recharts@2.5.0/dist/Recharts.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Recharts dependencies -->
+    <script src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
+    <script src="https://unpkg.com/recharts@2.5.0/dist/Recharts.js"></script>
     <style>
         body { margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     </style>
@@ -18,7 +20,7 @@
     
     <script type="text/babel">
         const { useState, useEffect } = React;
-        const { PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = Recharts;
+        const { PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = window.Recharts;
 
         const CATEGORIES = ['Bonds', 'Stocks', 'ETFs', 'Speculative', 'Gold & Silver', 'Cash', 'Real Estate'];
         const COLORS = ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#eab308', '#6366f1', '#ec4899'];
@@ -327,7 +329,7 @@
                   {CATEGORIES.map((category, idx) => (
                     <div key={category} className="bg-white p-6 rounded-lg shadow">
                       <div className="flex justify-between items-center mb-4">
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4 flex-wrap">
                           <h3 className="text-lg font-semibold">{category}</h3>
                           <div className="text-sm text-gray-500">
                             Total: {calculateCategoryTotal(portfolio, category).toLocaleString('pl-PL', { minimumFractionDigits: 2 })} {BASE_CURRENCY}
@@ -362,7 +364,7 @@
                       </div>
 
                       {portfolios[portfolio].holdings[category]?.map(holding => (
-                        <div key={holding.id} className="grid grid-cols-5 gap-2 mb-2">
+                        <div key={holding.id} className="grid grid-cols-1 md:grid-cols-5 gap-2 mb-2">
                           <input
                             type="text"
                             placeholder="Asset name"
@@ -591,14 +593,14 @@
           };
 
           return (
-            <div className="min-h-screen bg-gray-50 p-8">
+            <div className="min-h-screen bg-gray-50 p-4 md:p-8">
               <div className="max-w-7xl mx-auto">
                 <div className="mb-8">
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2">Personal Finance Portfolio Tracker</h1>
+                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Personal Finance Portfolio Tracker</h1>
                   <p className="text-gray-600">Track your wealth across personal and retirement accounts</p>
                 </div>
 
-                <div className="mb-6 flex gap-2">
+                <div className="mb-6 flex flex-wrap gap-2">
                   <button
                     onClick={() => setViewMode('current')}
                     className={`px-4 py-2 rounded-lg font-medium ${viewMode === 'current' ? 'bg-purple-600 text-white' : 'bg-white text-gray-700'}`}
@@ -632,7 +634,7 @@
                 </div>
 
                 {viewMode !== 'summary' && (
-                  <div className="mb-6 flex gap-2">
+                  <div className="mb-6 flex flex-wrap gap-2">
                     <button
                       onClick={() => setActiveTab('personal')}
                       className={`px-6 py-3 rounded-lg font-medium ${activeTab === 'personal' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'}`}
@@ -653,7 +655,7 @@
                 {viewMode === 'summary' && renderSummaryView()}
 
                 {showRatesModal && (
-                  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-lg p-6 max-w-md w-full">
                       <h3 className="text-xl font-semibold mb-4">Edit Exchange Rates</h3>
                       <p className="text-sm text-gray-600 mb-4">Enter how many PLN equals 1 unit of each currency</p>
